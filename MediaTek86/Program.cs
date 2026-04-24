@@ -6,6 +6,14 @@ using System.Windows.Forms;
 
 namespace MediaTek86
 {
+    /// <summary>
+    /// Application de gestion des médiathèques
+    /// </summary>
+    internal class NamespaceDoc
+    {
+
+    }
+
     internal static class Program
     {
         /// <summary>

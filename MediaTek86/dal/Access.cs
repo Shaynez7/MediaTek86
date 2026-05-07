@@ -16,6 +16,9 @@ namespace MediaTek86.dal
 
     }
 
+    /// <summary>
+    /// Accès aux données
+    /// </summary>
     public class Access
     {
         /// <summary>

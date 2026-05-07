@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace MediaTek86.dal
 {
     /// <summary>
-    /// Classe permettant de gérer les demandes concernant les responsables
+    /// Classe permettant de gérer les demandes concernant les services
     /// </summary>
-    public class ResponsableAccess
+    public class ServiceAccess
     {
         /// <summary>
         /// Instance unique de l'accès aux données
@@ -20,32 +20,31 @@ namespace MediaTek86.dal
         /// <summary>
         /// Constructeur pour créer l'accès aux données
         /// </summary>
-        public ResponsableAccess()
+        public ServiceAccess()
         {
             access = Access.GetInstance();
         }
 
         /// <summary>
-        /// Controle si l'utillisateur a le droit de se connecter (login et pwd)
+        /// Récupère et retourne les services
         /// </summary>
-        /// <param name="login"></param>
-        /// <param name="pwd"></param>
-        /// <returns>vrai si l'utilisateur est le responsable</returns>
-        public Boolean ControleAuthentification(Responsable responsable)
+        /// <returns>liste des services</returns>
+        public List<Service> GetLesServices()
         {
+            List<Service> lesServices = new List<Service>();
             if (access.Manager != null)
             {
-                string req = "select * from responsable ";
-                req += "where login=@login and pwd=SHA2(@pwd, 256);";
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("@login", responsable.Login);
-                parameters.Add("@pwd", responsable.Pwd);
+                string req = "select * from service order by nom;";
                 try
                 {
-                    List<Object[]> records = access.Manager.ReqSelect(req, parameters);
+                    List<Object[]> records = access.Manager.ReqSelect(req);
                     if (records != null)
                     {
-                        return (records.Count == 1);
+                        foreach (Object[] record in records)
+                        {
+                            Service service = new Service((int)record[0], (string)record[1]);
+                            lesServices.Add(service);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -54,8 +53,7 @@ namespace MediaTek86.dal
                     Environment.Exit(0);
                 }
             }
-            return false;
+            return lesServices;
         }
-
     }
 }
